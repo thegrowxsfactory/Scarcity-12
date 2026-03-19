@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12 Scarcity Archetypes — Diagnosis Protocol</title>
+<meta name="description" content="Discover your dominant scarcity archetype across all 12 patterns. 24 questions. Full score interpretation. Free.">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;
+  --surface:#f8f8f8;
+  --surface2:#f2f2f2;
+  --surface3:#ececec;
+  --gold:#9A6F1E;
+  --gold2:#7a5514;
+  --gold-dim:rgba(154,111,30,0.08);
+  --gold-glow:rgba(154,111,30,0.04);
+  --text:#1a1a1a;
+  --text-muted:#555555;
+  --text-dim:#999999;
+  --red:#c8341a;
+  --amber:#9a6f1e;
+  --purple:#3c3489;
+  --teal:#0f6e56;
+  --fear-bg:rgba(200,52,26,0.06);
+  --worth-bg:rgba(154,111,30,0.06);
+  --lack-bg:rgba(60,52,137,0.06);
+  --sab-bg:rgba(15,110,86,0.06);
+  --border:rgba(0,0,0,0.1);
+  --border-strong:rgba(0,0,0,0.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Microsoft Sans Serif',sans-serif;min-height:100vh;overflow-x:hidden}
+
+
+
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 24px 80px}
+
+/* ── INTRO SCREEN ── */
+.intro{padding:60px 0 0;animation:fadeIn .6s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.brand-line{display:flex;align-items:center;gap:10px;margin-bottom:48px}
+.brand-mark{
+  width:28px;height:28px;border:1px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-mark svg{width:14px;height:14px}
+.brand-name{font-size:11px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase}
+
+.eyebrow{
+  display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--border-strong);
+  padding:5px 14px;margin-bottom:24px;
+}
+.hero-h1{
+  font-family:'Microsoft Sans Serif',sans-serif;
+  font-size:clamp(38px,7vw,64px);font-weight:bold;
+  line-height:1.05;margin-bottom:20px;
+}
+.hero-h1 em{color:var(--gold)}
+
+.hero-sub{
+  font-size:16px;color:var(--text-muted);
+  line-height:1.7;max-width:500px;margin-bottom:36px;
+}
+
+.intro-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:40px;
+}
+.stat-cell{background:var(--surface);padding:16px 20px}
+.stat-n{font-family:'Microsoft Sans Serif',sans-serif;font-size:32px;font-weight:bold;color:var(--gold);line-height:1}
+.stat-l{font-size:11px;color:var(--text-dim);margin-top:3px;text-transform:uppercase;letter-spacing:1px}
+
+.arch-preview{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin-bottom:40px;
+}
+.arch-prev-item{
+  border:1px solid var(--border);
+  padding:14px 16px;background:var(--surface);
+}
+.arch-prev-cat{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.arch-prev-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px}
+.arch-prev-belief{font-size:11px;color:var(--text-muted);line-height:1.5}
+
+.cat-f{color:var(--red)}.cat-w{color:var(--amber)}.cat-l{color:var(--purple)}.cat-s{color:var(--teal)}
+
+.start-cta{
+  width:100%;background:var(--gold);color:var(--bg);
+  border:none;font-family:'Microsoft Sans Serif',sans-serif;
+  font-size:15px;font-weight:bold;
+  padding:18px 32px;cursor:pointer;
+  letter-spacing:0.5px;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.start-cta:hover{background:#d4b458;transform:translateY(-1px)}
+.cta-arrow{font-size:20px;font-weight:300}
+.privacy-note{text-align:center;font-size:12px;color:var(--text-dim);margin-top:14px}
+
+/* ── QUIZ SCREEN ── */
+.quiz{display:none;padding-top:48px;animation:fadeIn .4s ease both}
+
+.quiz-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:32px;
+}
+.quiz-brand{font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+.quit-btn{background:none;border:none;color:var(--text-dim);font-family:'Microsoft Sans Serif',sans-serif;font-size:12px;cursor:pointer;padding:4px 8px}
+.quit-btn:hover{color:var(--text-muted)}
+
+.prog-wrap{margin-bottom:36px}
+.prog-track{height:1px;background:var(--border);margin-bottom:8px}
+.prog-fill{height:100%;background:var(--gold);transition:width .5s ease;width:0}
+.prog-meta{display:flex;justify-content:space-between}
+.prog-count{font-size:11px;color:var(--text-dim)}
+.prog-arch{font-size:11px;color:var(--gold);letter-spacing:0.5px}
+
+.arch-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:16px;
+}
+.arch-badge-cat{font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border:1px solid}
+.badge-f{color:var(--red);border-color:rgba(200,52,26,0.3);background:var(--fear-bg)}
+.badge-w{color:var(--amber);border-color:rgba(186,117,23,0.3);background:var(--worth-bg)}
+.badge-l{color:var(--purple);border-color:rgba(83,74,183,0.3);background:var(--lack-bg)}
+.badge-s{color:var(--teal);border-color:rgba(15,110,86,0.3);background:var(--sab-bg)}
+.arch-badge-name{font-size:12px;color:var(--text-muted)}
+
+.q-text{
+  font-family:'Microsoft Sans Serif',sans-serif;
+  font-size:clamp(18px,3.5vw,24px);font-weight:400;
+  line-height:1.45;color:var(--text);
+  margin-bottom:28px;
+}
+
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.opt{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  cursor:pointer;transition:all 0.15s;
+}
+.opt:hover{border-color:var(--border-strong);background:var(--surface2)}
+.opt.selected{border-color:var(--gold);background:var(--gold-dim)}
+.opt-radio{
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--text-dim);flex-shrink:0;
+  transition:all 0.15s;
+}
+.opt.selected .opt-radio{background:var(--gold);border-color:var(--gold)}
+.opt-radio-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--bg);margin:4px auto;
+  display:none;
+}
+.opt.selected .opt-radio-dot{display:block}
+.opt-label{font-size:14px;color:var(--text-muted);flex:1;line-height:1.4}
+.opt.selected .opt-label{color:var(--text)}
+.opt-pts{font-size:11px;color:var(--text-dim);white-space:nowrap}
+
+.quiz-nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-back{
+  background:transparent;border:1px solid var(--border);
+  color:var(--text-muted);font-family:'Microsoft Sans Serif',sans-serif;
+  font-size:13px;padding:11px 20px;cursor:pointer;transition:all .15s;
+}
+.nav-back:hover{border-color:var(--border-strong);color:var(--text)}
+.nav-back:disabled{opacity:.25;cursor:default}
+.nav-next{
+  background:var(--gold);color:var(--bg);
+  border:none;font-family:'Microsoft Sans Serif',sans-serif;
+  font-size:14px;font-weight:600;
+  padding:11px 28px;cursor:pointer;
+  transition:all .2s;opacity:.3;pointer-events:none;
+}
+.nav-next.ready{opacity:1;pointer-events:all}
+.nav-next.ready:hover{background:#d4b458}
+
+/* ── RESULTS SCREEN ── */
+.results{display:none;padding-top:48px;animation:fadeIn .5s ease both}
+
+.results-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:40px;
+}
+.results-brand{font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+.retake-link{background:none;border:1px solid var(--border);color:var(--text-muted);font-family:'Microsoft Sans Serif',sans-serif;font-size:12px;padding:6px 14px;cursor:pointer}
+.retake-link:hover{border-color:var(--border-strong);color:var(--text)}
+
+.score-section{text-align:center;padding:40px 0 32px;border:1px solid var(--border);margin-bottom:1.5rem;background:#f8f8f8}
+.ring-wrap{display:inline-flex;align-items:center;justify-content:center;position:relative;margin-bottom:20px}
+.ring-bg{fill:none;stroke:rgba(201,168,76,0.12);stroke-width:4}
+.ring-fg{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:339;stroke-dashoffset:339;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
+.ring-center{position:absolute;text-align:center}
+.ring-pct{font-family:'Microsoft Sans Serif',sans-serif;font-size:38px;font-weight:bold;line-height:1}
+.ring-lbl{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:1px;text-transform:uppercase}
+.score-band{font-family:'Microsoft Sans Serif',sans-serif;font-size:22px;font-weight:bold;margin-bottom:8px}
+.score-tag{font-size:14px;color:var(--text-muted);line-height:1.6;max-width:440px;margin:0 auto}
+
+.section-rule{
+  display:flex;align-items:center;gap:14px;
+  margin:1.75rem 0 1rem;
+}
+.section-rule-line{flex:1;height:1px;background:var(--border)}
+.section-rule-text{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap}
+
+.interp-box{
+  border:1px solid;padding:22px 24px;margin-bottom:1.25rem;
+}
+.interp-eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.interp-title{font-family:'Microsoft Sans Serif',sans-serif;font-size:20px;font-weight:bold;margin-bottom:10px}
+.interp-body{font-size:13px;line-height:1.75;color:var(--text-muted)}
+
+.top-archs{display:flex;flex-direction:column;gap:10px;margin-bottom:1.25rem}
+.arch-result-card{
+  border:1px solid var(--border);padding:18px 20px;
+  background:var(--surface);transition:border-color .15s;
+}
+.arch-result-card.top{border-color:var(--gold)}
+.arc-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.arc-name-block{}
+.arc-badge-small{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.arc-name{font-family:'Microsoft Sans Serif',sans-serif;font-size:18px;font-weight:bold;margin-bottom:2px}
+.arc-core{font-size:12px;color:var(--text-muted);font-style:italic}
+.arc-intensity{text-align:right;flex-shrink:0}
+.arc-pct-num{font-family:'Microsoft Sans Serif',sans-serif;font-size:28px;font-weight:bold}
+.arc-pct-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.arc-desc{font-size:13px;color:var(--text-muted);line-height:1.65;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+
+.all-bars{display:flex;flex-direction:column;gap:10px;margin-bottom:1.25rem}
+.bar-r{display:flex;align-items:center;gap:12px}
+.bar-name{font-size:12px;color:var(--text-muted);width:160px;flex-shrink:0;line-height:1.3}
+.bar-track{flex:1;height:4px;background:var(--border);overflow:hidden}
+.bar-fill{height:100%;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.bar-n{font-size:11px;color:var(--text-muted);width:32px;text-align:right}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.75rem}
+.ac-card{border:1px solid var(--border);padding:16px 18px;background:#f8f8f8}
+.ac-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}
+.ac-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px}
+.ac-body{font-size:12px;color:var(--text-muted);line-height:1.6}
+
+.share-box{
+  border:1px solid var(--border);padding:24px;text-align:center;
+  margin-bottom:1.25rem;background:var(--surface);
+}
+.share-title{font-size:14px;font-weight:500;margin-bottom:5px}
+.share-sub{font-size:13px;color:var(--text-muted);margin-bottom:18px}
+.share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.share-btn{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text-muted);font-family:'Microsoft Sans Serif',sans-serif;
+  font-size:12px;padding:9px 18px;cursor:pointer;transition:all .15s;
+}
+.share-btn:hover{border-color:var(--border-strong);color:var(--text)}
+.share-btn.copied{border-color:rgba(15,110,86,0.4);color:var(--teal)}
+
+.footer-note{text-align:center;font-size:12px;color:var(--text-dim);padding-top:24px;border-top:1px solid var(--border)}
+
+@media(max-width:520px){
+  .intro-stats{grid-template-columns:1fr 1fr}
+  .arch-preview{grid-template-columns:1fr}
+  .action-grid{grid-template-columns:1fr}
+  .quiz-top .quiz-brand{display:none}
+  .q-text{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- INTRO -->
+<div class="intro" id="screen-intro">
+  <div class="brand-line">
+    <div class="brand-mark">
+      <svg viewBox="0 0 14 14" fill="none">
+        <polygon points="7,1 13,10 1,10" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <span class="brand-name">10X Transformation System</span>
+  </div>
+
+  <div class="eyebrow">Free Diagnosis Protocol</div>
+  <h1 class="hero-h1">Which of the 12<br>scarcity archetypes<br>are <em>running you?</em></h1>
+  <p class="hero-sub">24 diagnostic questions. A complete breakdown of all 12 archetypes. Full score interpretation with your prescribed starting point. Brutally honest. Completely free.</p>
+
+  <div class="intro-stats">
+    <div class="stat-cell"><div class="stat-n">24</div><div class="stat-l">Questions</div></div>
+    <div class="stat-cell"><div class="stat-n">12</div><div class="stat-l">Archetypes</div></div>
+    <div class="stat-cell"><div class="stat-n">5</div><div class="stat-l">Score bands</div></div>
+  </div>
+
+  <div class="arch-preview">
+    <div class="arch-prev-item">
+      <div class="arch-prev-cat cat-f">Fear archetypes</div>
+      <div class="arch-prev-name">The Protector · Catastrophiser · Deflector</div>
+      <div class="arch-prev-belief">Threat-based scarcity. Expansion feels dangerous.</div>
+    </div>
+    <div class="arch-prev-item">
+      <div class="arch-prev-cat cat-w">Worth archetypes</div>
+      <div class="arch-prev-name">The Settler · Imposter · People-Pleaser</div>
+      <div class="arch-prev-belief">Self-value scarcity. Deserving is conditional.</div>
+    </div>
+    <div class="arch-prev-item">
+      <div class="arch-prev-cat cat-l">Lack archetypes</div>
+      <div class="arch-prev-name">The Zero-Summer · Hoarder · Comparator</div>
+      <div class="arch-prev-belief">Fixed-pie scarcity. Resources are finite and scarce.</div>
+    </div>
+    <div class="arch-prev-item">
+      <div class="arch-prev-cat cat-s">Sabotage archetypes</div>
+      <div class="arch-prev-name">The Arsonist · Procrastinator · Perfectionist</div>
+      <div class="arch-prev-belief">Self-defeat scarcity. Success gets destroyed before arrival.</div>
+    </div>
+  </div>
+
+  <button class="start-cta" onclick="startQuiz()">
+    <span>Begin my diagnosis</span>
+    <span class="cta-arrow">→</span>
+  </button>
+  <p class="privacy-note">Free. No email required. Results appear immediately.</p>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz" id="screen-quiz">
+  <div class="quiz-top">
+    <span class="quiz-brand">Scarcity Archetype Diagnosis</span>
+    <button class="quit-btn" onclick="showIntro()">← Start over</button>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    <div class="prog-meta">
+      <span class="prog-count" id="prog-count">1 of 24</span>
+      <span class="prog-arch" id="prog-arch"></span>
+    </div>
+  </div>
+
+  <div id="q-area"></div>
+
+  <div class="quiz-nav">
+    <button class="nav-back" id="nav-back" onclick="goBack()">← Back</button>
+    <button class="nav-next" id="nav-next" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results" id="screen-results">
+  <div class="results-top">
+    <span class="results-brand">Your Diagnosis</span>
+    <button class="retake-link" onclick="showIntro()">Retake</button>
+  </div>
+
+  <div class="score-section">
+    <div class="ring-wrap">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle class="ring-bg" cx="65" cy="65" r="54"/>
+        <circle class="ring-fg" id="ring-fg" cx="65" cy="65" r="54" transform="rotate(-90 65 65)"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-pct" id="r-pct"></div>
+        <div class="ring-lbl">overall</div>
+      </div>
+    </div>
+    <div class="score-band" id="r-band"></div>
+    <div class="score-tag" id="r-tag"></div>
+  </div>
+
+  <div class="section-rule"><div class="section-rule-line"></div><span class="section-rule-text">Score interpretation</span><div class="section-rule-line"></div></div>
+  <div class="interp-box" id="r-interp"></div>
+
+  <div class="section-rule"><div class="section-rule-line"></div><span class="section-rule-text">Your dominant archetypes</span><div class="section-rule-line"></div></div>
+  <div class="top-archs" id="r-top-archs"></div>
+
+  <div class="section-rule"><div class="section-rule-line"></div><span class="section-rule-text">All 12 archetypes — severity ranking</span><div class="section-rule-line"></div></div>
+  <div class="all-bars" id="r-all-bars"></div>
+
+  <div class="section-rule"><div class="section-rule-line"></div><span class="section-rule-text">Your prescribed action plan</span><div class="section-rule-line"></div></div>
+  <div class="action-grid" id="r-actions"></div>
+
+  <div class="share-box">
+    <div class="share-title">Know someone who needs this?</div>
+    <div class="share-sub">Share the diagnosis — it's free for everyone.</div>
+    <div class="share-btns">
+      <button class="share-btn" id="copy-btn" onclick="copyLink()">Copy link</button>
+      <button class="share-btn" onclick="shareWA()">Share on WhatsApp</button>
+      <button class="share-btn" onclick="shareEmail()">Share by email</button>
+    </div>
+  </div>
+
+  <div class="footer-note">10X Transformation System — From Scarcity to Radical Abundance</div>
+</div>
+
+</div>
+
+<script>
+const ARCHETYPES=[
+  {id:'protector', name:'The Protector',    cat:'F', core:'Safety requires staying small.'},
+  {id:'catastroph',name:'The Catastrophiser',cat:'F',core:'Something will go wrong. It always does.'},
+  {id:'deflector', name:'The Deflector',    cat:'F', core:'If I stay invisible, I cannot be rejected.'},
+  {id:'settler',   name:'The Settler',      cat:'W', core:'I don\'t deserve more than this.'},
+  {id:'imposter',  name:'The Imposter',     cat:'W', core:'I\'ve fooled everyone. They\'ll find out.'},
+  {id:'pleaser',   name:'The People-Pleaser',cat:'W',core:'My worth depends on others\' approval.'},
+  {id:'zerosum',   name:'The Zero-Summer',  cat:'L', core:'Your gain is my loss.'},
+  {id:'hoarder',   name:'The Hoarder',      cat:'L', core:'I must stockpile. It could all run out.'},
+  {id:'comparator',name:'The Comparator',   cat:'L', core:'My success is only real relative to others.'},
+  {id:'arsonist',  name:'The Arsonist',     cat:'S', core:'I\'m not safe at the next level.'},
+  {id:'procrastin',name:'The Procrastinator',cat:'S',core:'If I don\'t start, I can\'t fail.'},
+  {id:'perfecti',  name:'The Perfectionist',cat:'S', core:'It must be flawless or it\'s worthless.'},
+];
+
+const ARCH_DESC={
+  protector: 'You treat opportunity as threat. Your nervous system has learned that expansion leads to pain. The work is building a new safety record through small, deliberate expansions that prove growth is survivable.',
+  catastroph:'You fast-forward to worst cases and use them to avoid action. Most feared outcomes are survivable. The work is a systematic audit of actual probability versus imagined probability.',
+  deflector: 'You stay invisible to avoid attack. You minimise wins and shrink in rooms. Visibility practice — one intentional act of being seen per week — begins to dismantle this pattern.',
+  settler:   'You systematically underprice, under-ask, and under-claim. The Settler pre-rejects themselves before anyone else can. Evidence architecture — a documented proof stack of your real value — is the primary intervention.',
+  imposter:  'You attribute wins to luck and live in fear of being "found out." Competence inventory work — documenting actual skills and outcomes — separates the feeling of fraudulence from the factual record.',
+  pleaser:   'Your ambition is constrained by what others find acceptable. You cannot say no. Your life is shaped by other people\'s comfort zones. Boundary installation — one clear no per week — begins to reclaim your direction.',
+  zerosum:   'Others\' success feels like your loss. You operate from a fixed-pie model. Abundance proof log practice directly challenges this with real evidence that collaboration and generosity produce more, not less.',
+  hoarder:   'You cannot invest, delegate, or give because depletion feels imminent. The Hoarder creates the very scarcity they fear. Generosity experiments — giving something of value weekly — rewire the relationship with resource.',
+  comparator:'Your sense of progress depends entirely on benchmarking against others. Without an internal scorecard there is no such thing as enough. A 30-day comparison fast resets this reflex permanently.',
+  arsonist:  'You build brilliantly and destroy at the threshold of breakthrough. This is nervous system dysregulation, not character failure. Threshold expansion — tolerating 90-second intervals of success discomfort — is the core practice.',
+  procrastin:'You mistake preparation for progress. The work never starts because starting risks failing. The 2-minute start rule — committing only to beginning, not completing — dissolves the resistance that intention cannot.',
+  perfecti:  'Nothing is ever good enough to ship. Perfectionism is fear of judgment wearing the costume of high standards. Good-enough protocol — defining done before starting and shipping at 80% — breaks the cycle.',
+};
+
+const QUESTIONS=[
+  {arch:'protector', q:'When a significant opportunity appears — a new client, a stage, a bold move — your first internal response is to look for reasons it might go wrong.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'protector', q:'You hold back from the next level of growth even when you logically know it would benefit you — because something about expanding feels unsafe.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'catastroph',q:'When facing an important decision, worst-case scenarios arise quickly and vividly and significantly influence whether you act.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'catastroph',q:'You feel superstitious about hope — as if expecting good outcomes will somehow cause them to be taken away.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'deflector', q:'When you receive genuine praise or recognition, your instinct is to minimise it, deflect it, or attribute it to something external.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'deflector', q:'You avoid being visibly successful, promoted, or publicly recognised — staying under the radar feels safer than being seen.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'settler',   q:'When setting your price, salary, or making a big ask, you go lower than you know you\'re worth because the higher number feels presumptuous.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'settler',   q:'You have declined or not applied for opportunities because you pre-decided you wouldn\'t get them — without anyone else having the chance to say no.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'imposter',  q:'Despite genuine evidence of your competence, you carry a persistent fear that you\'ll eventually be exposed as less capable than people believe.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'imposter',  q:'You over-prepare compulsively — not because it improves quality, but because it temporarily quiets the fear of being found out.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'pleaser',   q:'You adjust your ambitions or decisions based on what the people around you will find acceptable — even when you know your own direction.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'pleaser',   q:'Saying no to a request — even an unreasonable one — produces significant anxiety or guilt, often leading you to say yes despite the cost.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'zerosum',   q:'When someone in your field wins — gets the client, the deal, the recognition — you feel a sense of loss or threat, as though their gain reduced what\'s available to you.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'zerosum',   q:'You are reluctant to refer people, share knowledge, or make introductions — some part of you worries it will come back to cost you.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'hoarder',   q:'You find it genuinely difficult to invest money or resources — even when the return is clear — because the act of releasing what you have feels threatening.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'hoarder',   q:'You hold on to clients, relationships, or roles beyond their useful life because letting go feels like moving toward scarcity rather than something better.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'comparator',q:'Your sense of how well you are doing depends primarily on how you measure up against specific peers — not against your own goals.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'comparator',q:'When peers visibly outpace you in income or results, it produces a disproportionate sense of failure that is difficult to shake.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'arsonist',  q:'Looking back honestly, you can identify a pattern of slowing down or creating chaos at the point where something important was close to succeeding.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'arsonist',  q:'Success at a new level produces a restlessness or wrongness that makes you want to escape it rather than settle into it.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'procrastin',q:'You spend significant time preparing and researching — often indefinitely — as a substitute for beginning the thing itself.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'procrastin',q:'Tasks that carry meaningful stakes sit undone far longer than their difficulty warrants — the bigger the potential, the harder it is to start.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'perfecti',  q:'You rarely ship, submit, or complete things on time because they are never quite good enough — each improvement reveals new inadequacies.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+  {arch:'perfecti',  q:'Setting impossibly high standards serves, at least in part, to justify not fully attempting — because falling short of perfection confirms a deeper belief about your inadequacy.',opts:['Rarely or never','Sometimes, mildly','Regularly and noticeably','Almost every time, strongly']},
+];
+
+const BANDS=[
+  {min:0,max:19,name:'Minimal scarcity residue',color:'#1D9E75',
+   tag:'Your scarcity patterns are largely dormant. The work here is refinement and maintenance at a high level of functioning.',
+   bg:'rgba(15,110,86,0.1)',border:'rgba(15,110,86,0.3)',eyebrow:'Band 1 of 5 — Minimal',
+   title:'You are operating close to an abundance baseline.',
+   body:'Your scores indicate scarcity is not a dominant operating system. Specific contexts or high-stakes moments may surface residual patterns, but these are manageable. Your priority is consolidating bold behaviors and accelerating momentum. Stay vigilant for the subtle avoidance that only reveals itself at the next level of stakes.',
+   phase:'Phase 4–5',phaseNote:'Bold behavior installation and momentum acceleration.'},
+  {min:20,max:35,name:'Mild scarcity patterns',color:'#639922',
+   tag:'Scarcity shows up in specific archetypes but has not colonised your entire operating system.',
+   bg:'rgba(99,153,34,0.1)',border:'rgba(99,153,34,0.3)',eyebrow:'Band 2 of 5 — Mild',
+   title:'Targeted intervention will produce rapid results.',
+   body:'You have genuine awareness and real capability, but 2–4 archetypes are limiting you in specific domains. Review your breakdown carefully. The highest-scoring archetypes are where scarcity has its grip. You don\'t need a full excavation — you need precision belief work on your dominant 1–2 archetypes. You are likely blocking a specific income ceiling or opportunity category rather than experiencing pervasive scarcity.',
+   phase:'Phase 2–3',phaseNote:'Targeted belief detox and neural reprogramming.'},
+  {min:36,max:53,name:'Moderate scarcity wiring',color:'#BA7517',
+   tag:'Scarcity is active across multiple archetypes, consistently shaping your decisions, income, and relationships.',
+   bg:'rgba(186,117,23,0.1)',border:'rgba(186,117,23,0.3)',eyebrow:'Band 3 of 5 — Moderate',
+   title:'Multiple archetypes are running simultaneously.',
+   body:'At this level, scarcity is actively filtering what you see, what you ask for, and how you respond to success. The critical insight: your current results are the logical output of your current architecture. Nothing is broken. The work is systematic — diagnose each active archetype, detox its root belief, and reprogram before attempting behavioral change. Behavioral change without belief change does not hold.',
+   phase:'Phase 1–2',phaseNote:'Full scarcity autopsy followed by targeted detox work.'},
+  {min:54,max:67,name:'Deep scarcity conditioning',color:'#D85A30',
+   tag:'Scarcity is a pervasive operating system — shaping your identity, daily decisions, and relationship to success itself.',
+   bg:'rgba(216,90,48,0.1)',border:'rgba(216,90,48,0.3)',eyebrow:'Band 4 of 5 — Deep',
+   title:'This is foundational work, not surface adjustment.',
+   body:'At this level, scarcity is not a habit. It is an identity — a deeply wired self-concept that shapes perception before conscious thought arrives. Work must begin at the architecture level: understanding where this was installed, by whom, and at what cost. Do not attempt behavioral change before the foundational detox work is complete. It will not hold.',
+   phase:'Phase 1',phaseNote:'Full diagnostic and origin work — non-negotiable first step.'},
+  {min:68,max:96,name:'Severe scarcity architecture',color:'#A32D2D',
+   tag:'Scarcity runs at the deepest level of your identity across nearly every dimension of life.',
+   bg:'rgba(163,45,45,0.1)',border:'rgba(163,45,45,0.3)',eyebrow:'Band 5 of 5 — Severe',
+   title:'This requires sustained, deep, fully supported work.',
+   body:'Your scores indicate scarcity has become the primary lens through which you experience reality. This is not a character flaw — it is the logical result of sustained conditioning, often installed very early in life. The pattern is completely transformable. But it will not transform through willpower or behavioral protocols alone. You need the full Phase 1–2 work first: grief processing, origin mapping, identity detox, and nervous system regulation.',
+   phase:'Full 6-phase program',phaseNote:'Phases 1 and 2 are the absolute non-negotiable entry point.'},
+];
+
+const BAR_COLORS={F:'#c8341a',W:'#ba7517',L:'#534ab7',S:'#1D9E75'};
+const BADGE_CLASS={F:'badge-f',W:'badge-w',L:'badge-l',S:'badge-s'};
+const CAT_NAME={F:'Fear',W:'Worth',L:'Lack',S:'Sabotage'};
+
+let current=0;
+const answers=new Array(24).fill(null);
+
+function showIntro(){
+  answers.fill(null);current=0;
+  document.getElementById('screen-intro').style.display='block';
+  document.getElementById('screen-quiz').style.display='none';
+  document.getElementById('screen-results').style.display='none';
+}
+
+function startQuiz(){
+  document.getElementById('screen-intro').style.display='none';
+  document.getElementById('screen-quiz').style.display='block';
+  renderQ();
+}
+
+function renderQ(){
+  const q=QUESTIONS[current];
+  const arch=ARCHETYPES.find(a=>a.id===q.arch);
+  const pct=Math.round((current/QUESTIONS.length)*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=(current+1)+' of 24';
+  document.getElementById('prog-arch').textContent=arch.name;
+  document.getElementById('nav-back').disabled=current===0;
+  const nxt=document.getElementById('nav-next');
+  nxt.textContent=current===QUESTIONS.length-1?'See my results':'Next →';
+  if(answers[current]!==null)nxt.classList.add('ready');else nxt.classList.remove('ready');
+
+  document.getElementById('q-area').innerHTML=`
+    <div class="arch-badge">
+      <span class="arch-badge-cat ${BADGE_CLASS[arch.cat]}">${CAT_NAME[arch.cat]}</span>
+      <span class="arch-badge-name">${arch.name}</span>
+    </div>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts-list">
+      ${q.opts.map((label,i)=>`
+        <button class="opt${answers[current]===i?' selected':''}" onclick="selectOpt(${i})">
+          <span class="opt-radio"><span class="opt-radio-dot"></span></span>
+          <span class="opt-label">${label}</span>
+          <span class="opt-pts">${i===0?'0 pts':i===1?'1 pt':i===2?'2 pts':'3 pts'}</span>
+        </button>`).join('')}
+    </div>`;
+}
+
+function selectOpt(i){
+  answers[current]=i;
+  document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('selected',j===i));
+  document.getElementById('nav-next').classList.add('ready');
+}
+function goBack(){if(current>0){current--;renderQ();}}
+function goNext(){
+  if(answers[current]===null)return;
+  if(current<QUESTIONS.length-1){current++;renderQ();}
+  else showResults();
+}
+
+function showResults(){
+  document.getElementById('screen-quiz').style.display='none';
+  document.getElementById('screen-results').style.display='block';
+
+  const archScores={};
+  ARCHETYPES.forEach(a=>archScores[a.id]=0);
+  QUESTIONS.forEach((q,i)=>{if(answers[i]!==null)archScores[q.arch]+=answers[i];});
+
+  const total=Object.values(archScores).reduce((a,b)=>a+b,0);
+  const maxTotal=QUESTIONS.length*3;
+  const pct=Math.round((total/maxTotal)*100);
+  const scaled=Math.round((pct/100)*96);
+  const band=BANDS.find(b=>scaled>=b.min&&scaled<=b.max)||BANDS[BANDS.length-1];
+
+  const sorted=ARCHETYPES.map(a=>({...a,score:archScores[a.id],intensity:Math.round((archScores[a.id]/6)*100)})).sort((a,b)=>b.score-a.score);
+
+  const circ=339;
+  const ring=document.getElementById('ring-fg');
+  ring.style.stroke=band.color;
+  setTimeout(()=>{ring.style.strokeDashoffset=circ-(pct/100)*circ;},80);
+  document.getElementById('r-pct').textContent=pct+'%';
+  document.getElementById('r-pct').style.color=band.color;
+  document.getElementById('r-band').textContent=band.name;
+  document.getElementById('r-tag').textContent=band.tag;
+
+  document.getElementById('r-interp').style.background=band.bg;
+  document.getElementById('r-interp').style.borderColor=band.border;
+  document.getElementById('r-interp').innerHTML=`
+    <div class="interp-eyebrow" style="color:${band.color}">${band.eyebrow}</div>
+    <div class="interp-title">${band.title}</div>
+    <div class="interp-body">${band.body}</div>`;
+
+  document.getElementById('r-top-archs').innerHTML=sorted.slice(0,3).map((a,i)=>`
+    <div class="arch-result-card ${i===0?'top':''}">
+      <div class="arc-top-row">
+        <div class="arc-name-block">
+          <div class="arc-badge-small cat-${a.cat.toLowerCase()}">${CAT_NAME[a.cat]} archetype${i===0?' · Dominant':''}</div>
+          <div class="arc-name">${a.name}</div>
+          <div class="arc-core">"${a.core}"</div>
+        </div>
+        <div class="arc-intensity">
+          <div class="arc-pct-num" style="color:${BAR_COLORS[a.cat]}">${a.intensity}%</div>
+          <div class="arc-pct-lbl">intensity</div>
+        </div>
+      </div>
+      <div class="arc-desc">${ARCH_DESC[a.id]}</div>
+    </div>`).join('');
+
+  const barsEl=document.getElementById('r-all-bars');
+  barsEl.innerHTML=sorted.map(a=>`
+    <div class="bar-r">
+      <span class="bar-name">${a.name}</span>
+      <div class="bar-track"><div class="bar-fill" data-w="${a.intensity}" style="background:${BAR_COLORS[a.cat]}"></div></div>
+      <span class="bar-n">${a.intensity}%</span>
+    </div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach(el=>el.style.width=el.dataset.w+'%');},100);
+
+  const top=sorted[0];
+  document.getElementById('r-actions').innerHTML=`
+    <div class="ac-card">
+      <div class="ac-label">Prescribed start</div>
+      <div class="ac-title">${band.phase}</div>
+      <div class="ac-body">${band.phaseNote} Your dominant archetype cluster is ${CAT_NAME[top.cat]}-based.</div>
+    </div>
+    <div class="ac-card">
+      <div class="ac-label">Priority archetype</div>
+      <div class="ac-title">${top.name}</div>
+      <div class="ac-body">Core belief to excavate: "${top.core}"</div>
+    </div>
+    <div class="ac-card">
+      <div class="ac-label">Week 1 practice</div>
+      <div class="ac-title">Origin interview</div>
+      <div class="ac-body">Trace your dominant archetype to its earliest memory. Name the person or moment that installed the core belief.</div>
+    </div>
+    <div class="ac-card">
+      <div class="ac-label">Watch for</div>
+      <div class="ac-title">Resistance as signal</div>
+      <div class="ac-body">Any urge to dismiss this diagnosis is the pattern defending itself. Stay in the chair.</div>
+    </div>`;
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    const btn=document.getElementById('copy-btn');
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy link';btn.classList.remove('copied');},2000);
+  }).catch(()=>prompt('Copy this link:',window.location.href));
+}
+function shareWA(){
+  const url=encodeURIComponent(window.location.href);
+  window.open('https://wa.me/?text='+encodeURIComponent('Find out which of the 12 scarcity archetypes are running you — free 24-question diagnosis: ')+url,'_blank');
+}
+function shareEmail(){
+  const s=encodeURIComponent('Discover your scarcity archetype — free 24-question diagnosis');
+  const b=encodeURIComponent('I just took this scarcity archetype diagnosis and it was eye-opening.\n\nFree 24 questions here: '+window.location.href);
+  window.location.href='mailto:?subject='+s+'&body='+b;
+}
+</script>
+</body>
+</html>
